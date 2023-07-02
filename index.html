@@ -9,11 +9,11 @@
 </head>
 <body>
     <h1 class="text-white p-4">amaysim</h1>
-    <marquee class="d-flex align-items-center" scrollamount="10" id="promotions"><span>✓ Buy 3 Unlimited 1GB Sims, Pay for Just 2!</span><span>✓ Get more than 3 Unlimited 3GB and pay for $39.90 only each!</span><span> ✓ Get one 1GB Data-pack for every purchase of Unlimited 2GB</span> </marquee>
+    <marquee class="d-flex align-items-center" scrollamount="5" id="promotions"><span>✓ Buy 3 Unlimited 1GB Sims, Pay for Just 2!</span><span>✓ Get more than 3 Unlimited 3GB and pay for $39.90 only each!</span><span> ✓ Get one 1GB Data-pack for every purchase of Unlimited 2GB</span> </marquee>
     <div class="container">
         <div class="row pt-4">
             <div class="col-md-6">
-                <h2>Product List</h2>
+                <h2>Purchase our amaySIMs!</h2><br>
                 <table class="table">
                     <thead>
                         <tr>
@@ -47,7 +47,7 @@
                 </div>
                 <div>
                     <label class="form-label" for="input-promo-code">Promo Code:</label><span id="promo-code-success"> Promo Applied!</span>
-                    <input class="form-control mb-3" id="input-promo-code" oninput="prepareCart()" >
+                    <input class="form-control mb-3" id="input-promo-code" oninput="computeTotalPrice()" >
                 </div>
                 <div>
                     <button class="btn btn-danger" id="clear-cart-btn">Clear Cart</button>

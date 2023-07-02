@@ -41,15 +41,16 @@ function renderProductList() {
   });
 }
 
-// Function to add to cart
+// // Function to add to cart
 function addToCart(item) {
-  const newCartItem = itemsInCart.find(
-    (itemsInCart) => itemsInCart.item.name === item.name
+  const existingCartItem = itemsInCart.find(
+    (cartItem) => cartItem.item.name === item.name
   );
-  if (newCartItem) {
-    newCartItem.quantityOfItem++;
-    newCartItem.totalPrice =
-      newCartItem.item.price * newCartItem.quantityOfItem;
+
+  if (existingCartItem) {
+    existingCartItem.quantityOfItem++;
+    existingCartItem.totalPrice =
+      existingCartItem.item.price * existingCartItem.quantityOfItem;
   } else {
     const newCartItem = {
       item: item,
@@ -58,6 +59,28 @@ function addToCart(item) {
     };
     itemsInCart.push(newCartItem);
   }
+
+  if (item.name === "Unlimited 2GB") {
+    const dataPackItem = { name: "Free 1GB Data-pack", price: 0 };
+
+    const existingDataPackItem = itemsInCart.find(
+      (cartItem) => cartItem.item.name === dataPackItem.name
+    );
+
+    if (existingDataPackItem) {
+      existingDataPackItem.quantityOfItem++;
+      existingDataPackItem.totalPrice =
+        existingDataPackItem.item.price * existingDataPackItem.quantityOfItem;
+    } else {
+      const newDataPackItem = {
+        item: dataPackItem,
+        quantityOfItem: 1,
+        totalPrice: dataPackItem.price,
+      };
+      itemsInCart.push(newDataPackItem);
+    }
+  }
+
   renderCartItems();
   hideCartList();
 }
@@ -84,11 +107,11 @@ function renderCartItems() {
 
     cartListElement.appendChild(rowElement);
   });
-  prepareCart();
+  computeTotalPrice();
 }
 
-// Function to prepare cart for rendering
-function prepareCart() {
+// Function to compute and render total price
+function computeTotalPrice() {
   const checkOutPriceElement = document.getElementById("total-price");
   checkOutPriceElement.textContent = "";
 
@@ -130,9 +153,8 @@ function isEligibleForPromo() {
 
   const qtyOf1GBDiscount = Math.floor(unli1GBCount / 3);
   const qtyOf5GBDiscount = unli5GBCount > 3 ? unli5GBCount : 0;
-
   discountPrice = qtyOf1GBDiscount * 24.9 + qtyOf5GBDiscount * 5;
-
+  
   return discountPrice;
 }
 
