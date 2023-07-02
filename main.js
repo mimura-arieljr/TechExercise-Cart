@@ -136,13 +136,12 @@ function computeTotalPrice() {
   checkOutPriceElement.textContent = `$${checkOutPrice.toFixed(2)}`;
 }
 
-// Function to check and apply for promo eligibility
+// Computes for discount price if eligible to promo
 function isEligibleForPromo() {
   let unli1GBCount = 0;
   let unli5GBCount = 0;
   let discountPrice = 0;
 
-  // Check for eligibility for Unli1GB promo
   itemsInCart.forEach((cartItem) => {
     if (cartItem.item.name == "Unlimited 1GB") {
       unli1GBCount += cartItem.quantityOfItem;
@@ -158,7 +157,7 @@ function isEligibleForPromo() {
   return discountPrice;
 }
 
-// Function to clear the cart upon clear cart button click
+// Function to clear the cart
 function clearCart() {
   itemsInCart.length = 0;
   hideCartList();
