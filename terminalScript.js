@@ -6,22 +6,21 @@ const products = [
   { name: "1GBDataPack", price: 9.9 },
 ];
 
-const promoCode = "I<3AMAYSIM";
-
-// Initialize an array for cart items
-const itemsInCart = [];
-
 // Class definition for ShoppingCart
 class ShoppingCart {
   constructor(pricingRules) {
     this.pricingRules = pricingRules;
+    this.promoCode = "I<3AMAYSIM";
+    this.inputPromoCode = "";
+    this.itemsIncart = [];
   }
 
   add(item, promoCode) {
-    const existingCartItem = itemsInCart.find(
+    this.inputPromoCode = promoCode;
+    const existingCartItem = this.itemsIncart.find(
       (cartItem) => cartItem.item.name === item.name
     );
-
+    
     if (existingCartItem) {
       existingCartItem.quantityOfItem++;
       existingCartItem.totalPrice =
@@ -32,13 +31,13 @@ class ShoppingCart {
         quantityOfItem: 1,
         totalPrice: item.price,
       };
-      itemsInCart.push(newCartItem);
+      this.itemsIncart.push(newCartItem);
     }
 
-    if (item.name === "Unlimited 2GB") {
+    if (item.name === "Unli2GB") {
       const dataPackItem = { name: "Free 1GB Data-pack", price: 0 };
 
-      const existingDataPackItem = itemsInCart.find(
+      const existingDataPackItem = this.itemsIncart.find(
         (cartItem) => cartItem.item.name === dataPackItem.name
       );
 
@@ -52,12 +51,11 @@ class ShoppingCart {
           quantityOfItem: 1,
           totalPrice: dataPackItem.price,
         };
-        itemsInCart.push(newDataPackItem);
+        this.itemsIncart.push(newDataPackItem);
       }
     }
 
     this.renderCartItems();
-    // this.hideCartList();
   }
 
   total() {
@@ -65,11 +63,16 @@ class ShoppingCart {
   }
 
   items() {
-    console.log(itemsInCart);
+    if (this.itemsIncart.length === 0) {
+      console.log("\nCart is empty!");
+    } else {
+      console.log(this.itemsIncart);
+    }
+    console.log("\nEnter a command: ");
   }
 
   renderCartItems() {
-    itemsInCart.forEach((cartItem) => {
+    this.itemsIncart.forEach((cartItem) => {
       const totalPrice = `$${cartItem.totalPrice.toFixed(2)}`;
       console.log(`\n\n${cartItem.item.name} - Qty: ${cartItem.quantityOfItem} - ${totalPrice}`);
     });
@@ -79,23 +82,24 @@ class ShoppingCart {
 
   computeTotalPrice() {
     // Compute the total price for checkout
-    let checkOutPrice = itemsInCart.reduce((total, cartItem) => {
+    let checkOutPrice = this.itemsIncart.reduce((total, cartItem) => {
       return total + cartItem.totalPrice;
     }, 0);
 
     // Apply promo discounts if eligible
     let discountPrice = this.isEligibleForPromo();
     checkOutPrice -= discountPrice;
-
-    // Applies 10% discount if promo code is valid
-    if (promoCode === this.promoCode) {
-      checkOutPrice *= 0.9;
+    if (discountPrice>0){
       this.showPromoApplied();
-    } else {
-      this.hidePromoApplied();
     }
 
-    console.log(`Total Price: $${checkOutPrice.toFixed(2)}`);
+    // Applies 10% discount if promo code is valid
+    if (this.promoCode === this.inputPromoCode) {
+      checkOutPrice *= 0.9;
+      this.showPromoApplied();
+    } 
+    console.log(`Total Price: $${checkOutPrice.toFixed(2)}\n`);
+    console.log("Enter a command: ");
   }
 
   isEligibleForPromo() {
@@ -103,10 +107,10 @@ class ShoppingCart {
     let unli5GBCount = 0;
     let discountPrice = 0;
 
-    itemsInCart.forEach((cartItem) => {
-      if (cartItem.item.name === "Unlimited 1GB") {
+    this.itemsIncart.forEach((cartItem) => {
+      if (cartItem.item.name === "Unli1GB") {
         unli1GBCount += cartItem.quantityOfItem;
-      } else if (cartItem.item.name === "Unlimited 5GB") {
+      } else if (cartItem.item.name === "Unli5GB") {
         unli5GBCount += cartItem.quantityOfItem;
       }
     });
@@ -119,21 +123,17 @@ class ShoppingCart {
   }
 
   clearCart() {
-    itemsInCart.length = 0;
+    this.itemsIncart.length = 0;
     this.hideCartList();
     this.renderCartItems();
   }
 
   hideCartList() {
-    console.log(itemsInCart.length === 0 ? "Cart is empty" : "Cart is not empty");
+    console.log(this.itemsIncart.length === 0 ? "Cart is empty" : "Cart is not empty");
   }
 
   showPromoApplied() {
     console.log("Promo code applied");
-  }
-
-  hidePromoApplied() {
-    console.log("Promo code not applied");
   }
 }
 
